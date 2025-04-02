@@ -41,7 +41,7 @@ class _MobileExampleState extends State<MobileExample> {
   }
 
   void saveImage() async {
-    final image = await _controller.exportImage();
+    final image = await _controller.exportImage(120, 80);
     final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
     final directory = (await getApplicationDocumentsDirectory()).path;
     await Directory('$directory/sample').create(recursive: true);

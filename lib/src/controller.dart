@@ -189,12 +189,23 @@ class ImagePainterController extends ChangeNotifier {
     return byteData?.buffer.asUint8List();
   }
 
-  Future<Uint8List?> _renderSignature() async {
+  Future<Uint8List?> _resizeImage(Uint8List data, int targetWidth, int targetHeight) async {
+    ui.Codec codec = await ui.instantiateImageCodec(
+      data,
+      targetWidth: targetWidth,
+      targetHeight: targetHeight,
+    );
+    ui.FrameInfo frameInfo = await codec.getNextFrame();
+    final resizedByteData = await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
+    return resizedByteData?.buffer.asUint8List();
+  }
+
+  Future<Uint8List?> _renderSignature(int width, int height) async {
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
     SignaturePainter painter =
-        SignaturePainter(controller: this, backgroundColor: Colors.blue);
-
+        SignaturePainter(controller: this, backgroundColor: Colors.transparent);
+    print('_rect.width ${_rect.width} - _rect.height ${_rect.height}');
     Size size = Size(_rect.width, _rect.height);
 
     painter.paint(canvas, size);
@@ -203,12 +214,17 @@ class ImagePainterController extends ChangeNotifier {
         .toImage(size.width.floor(), size.height.floor());
     final byteData =
         await _convertedImage.toByteData(format: ui.ImageByteFormat.png);
-    return byteData?.buffer.asUint8List();
+    if (byteData == null) return null;
+
+    final originalImage = byteData.buffer.asUint8List();
+
+    // Resize ảnh
+    return await _resizeImage(originalImage, width, height);
   }
 
-  Future<Uint8List?> exportImage() {
+  Future<Uint8List?> exportImage(int width, int height) {
     if (_isSignature) {
-      return _renderSignature();
+      return _renderSignature(width, height);
     } else {
       return _renderImage();
     }

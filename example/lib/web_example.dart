@@ -36,7 +36,7 @@ class _WebExampleState extends State<WebExample> {
   }
 
   void saveImage() async {
-    final image = await _controller.exportImage();
+    final image = await _controller.exportImage(120, 80);
     final imageName = '${DateTime.now().millisecondsSinceEpoch}.png';
     js.context.callMethod('webSaveAs', [
       html.Blob([image]),

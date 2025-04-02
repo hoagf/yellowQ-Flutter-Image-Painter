@@ -11,7 +11,9 @@ class SignatureExample extends StatefulWidget {
 }
 
 class _SignatureExampleState extends State<SignatureExample> {
-  final _controller = ImagePainterController();
+  final _controller = ImagePainterController(
+    strokeWidth: 8
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class _SignatureExampleState extends State<SignatureExample> {
   }
 
   void saveImage() async {
-    final image = await _controller.exportImage();
+    final image = await _controller.exportImage(120,80);
     final directory = (await getApplicationDocumentsDirectory()).path;
     await Directory('$directory/sample').create(recursive: true);
     final fullPath = '$directory/sample/image.png';

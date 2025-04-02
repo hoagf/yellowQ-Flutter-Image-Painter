@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_painter_example/mobile_example.dart';
+import 'package:image_painter_example/signature_example.dart';
 
 void main() => runApp(ExampleApp());
 
@@ -20,6 +21,6 @@ class ExampleApp extends StatelessWidget {
 class ImagePainterExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MobileExample();
+    return SignatureExample();
   }
 }
